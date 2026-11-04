@@ -1,0 +1,15 @@
+# Dependencias (por si algún día se añaden)
+node_modules/
+
+# Secretos
+.env
+.env.*
+
+# Copias de seguridad exportadas de la app (contienen datos personales)
+entreno-backup-*.json
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/

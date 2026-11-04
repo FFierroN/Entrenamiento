@@ -1,0 +1,23 @@
+# Entreno — PWA personal de seguimiento de rutinas
+
+## Contexto
+- App de uso exclusivamente personal (Felipe). No es pública ni comercial: sin cuentas, sin backend, sin analítica.
+- Los datos viven en `localStorage` del dispositivo (`entreno:v1`). El respaldo es exportar/importar JSON.
+
+## Stack y reglas
+- HTML + CSS + JavaScript puro con módulos ES. **Sin dependencias ni paso de build**; no añadir frameworks ni paquetes npm sin preguntar.
+- Interfaz y textos en español. Pensada primero para móvil.
+- Pesos siempre en kg. Las sesiones guardan una copia del nombre y tipo del ejercicio; el historial se agrupa por `key` (nombre normalizado, ver `stats.key`).
+- Tipos de ejercicio: `weight_reps`, `reps_only`, `duration`, `check` (solo marcar). Tipos de serie: `normal`, `warmup`, `dropset`, `failure`.
+
+## Rutina
+- La rutina incluida es **Método Zero** (programa de 12 semanas, calistenia) en `js/rutina.js`: lun Tirón y empuje, mar Piernas, mié Estiramientos, jue Fullbody, vie Misión repeticiones.
+- Solo la sección **Misión repeticiones** tiene objetivos por semana (`weekly`); las progresiones de las demás van en `notes`.
+- La semana del programa se calcula desde `state.programStart` (lunes de inicio) y se puede cambiar en Ajustes.
+- Al cambiar la rutina, **sube `version`** para que se recargue en el dispositivo (solo si el usuario no la editó desde la app).
+
+## Service worker
+- Si cambias archivos de la app, sube `CACHE` en `sw.js` y añade los archivos nuevos a `ASSETS`.
+
+## Probar
+- `node dev-server.mjs` → http://localhost:5173 (configuración `entreno` en `.claude/launch.json`).

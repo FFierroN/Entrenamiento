@@ -1,0 +1,32 @@
+# Entreno
+
+PWA personal para seguir mi rutina semanal de gimnasio: registrar series de forma rápida, con temporizador de descanso, historial y progreso por ejercicio. Funciona sin internet y los datos se quedan en el propio teléfono.
+
+## Funciones
+- **Hoy:** muestra el día de la rutina que toca según el día de la semana.
+- **Entreno:** cada serie viene pre-rellenada con lo que hiciste la última vez; tocas ✓ y arranca el descanso.
+- **Tipos de serie:** normal, calentamiento (C), dropset (D) y al fallo (F). Toca el número de la serie para cambiarlo.
+- **Historial y progreso:** volumen, 1RM estimado, récords (🏆) y gráfica por ejercicio.
+- **Editor de rutina:** días, ejercicios, series, reps, peso, descanso y notas.
+- **Copia de seguridad:** exportar e importar en JSON desde Ajustes.
+
+## Probar en local
+```
+node dev-server.mjs
+```
+Abre http://localhost:5173
+
+## Estructura
+| Archivo | Qué hace |
+|---|---|
+| `index.html` | Estructura base, navegación y temporizador |
+| `styles.css` | Estilos (tema oscuro, pensado para móvil) |
+| `js/app.js` | Pantallas, navegación y acciones |
+| `js/store.js` | Guardado en `localStorage` |
+| `js/stats.js` | 1RM estimado, récords y volumen |
+| `js/timer.js` | Temporizador de descanso |
+| `js/rutina.js` | Rutina incluida en la app |
+| `sw.js` | Service worker (modo sin conexión) |
+| `manifest.webmanifest` | Datos para instalar la app |
+| `tools/generar-iconos.mjs` | Genera los íconos |
+| `docs/` | Informe de ingeniería inversa de Hevy |

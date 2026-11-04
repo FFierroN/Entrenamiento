@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Entreno</title>
+  <meta name="description" content="Seguimiento personal de rutinas de entrenamiento">
+  <meta name="theme-color" content="#0f1115">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Entreno">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app"></main>
+
+  <!-- Temporizador de descanso: aparece al marcar una serie -->
+  <div id="timer" hidden>
+    <div class="t-bar"></div>
+    <div class="t-row">
+      <button data-timer="-15">−15</button>
+      <div class="t-info"><span class="t-label">Descanso</span><span class="t-time">0:00</span></div>
+      <button data-timer="+15">+15</button>
+      <button data-timer="skip" class="t-skip">Saltar</button>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="#/" data-nav="">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Hoy</a>
+    <a href="#/historial" data-nav="historial">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-2a7 7 0 1 1-7-7zm-1 4v6l5 3 1-1.7-4-2.3V7z"/></svg>Historial</a>
+    <a href="#/progreso" data-nav="progreso">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18v-2H3zm2-4l5-5 4 4 6-7-1.5-1.3L14 12l-4-4-6.4 6.6z"/></svg>Progreso</a>
+    <a href="#/ajustes" data-nav="ajustes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>Ajustes</a>
+  </nav>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
