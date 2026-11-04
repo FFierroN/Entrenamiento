@@ -1,11 +1,11 @@
 // Service worker: guarda la app en caché para que funcione sin internet (gimnasio sin señal).
 // Estrategia "stale-while-revalidate": responde al instante desde la caché y actualiza en segundo plano.
 // Si cambias archivos y quieres forzar la actualización, sube el número de CACHE.
-const CACHE = "entreno-v2";
+const CACHE = "entreno-v3";
 const ASSETS = [
   "./", "./index.html", "./styles.css", "./manifest.webmanifest",
   "./js/app.js", "./js/store.js", "./js/stats.js", "./js/timer.js", "./js/rutina.js",
-  "./icons/icon.svg", "./icons/icon-192.png", "./icons/icon-512.png",
+  "./icons/apple-touch-icon.png", "./icons/icon-192.png", "./icons/icon-512.png",
 ];
 
 self.addEventListener("install", (e) => {

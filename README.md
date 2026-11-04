@@ -28,5 +28,6 @@ Abre http://localhost:5173
 | `js/rutina.js` | Rutina incluida en la app |
 | `sw.js` | Service worker (modo sin conexión) |
 | `manifest.webmanifest` | Datos para instalar la app |
-| `tools/generar-iconos.mjs` | Genera los íconos |
+| `icons/logo.jpg` | Logo original de la app |
+| `tools/generar-iconos.ps1` | Genera los íconos a partir del logo |
 | `docs/` | Informe de ingeniería inversa de Hevy |

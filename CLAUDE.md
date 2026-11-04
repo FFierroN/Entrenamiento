@@ -19,5 +19,11 @@
 ## Service worker
 - Si cambias archivos de la app, sube `CACHE` en `sw.js` y añade los archivos nuevos a `ASSETS`.
 
+## Íconos
+- Se generan desde `icons/logo.jpg` con `powershell -ExecutionPolicy Bypass -File tools/generar-iconos.ps1` (192, 512 y apple-touch 180).
+
+## Publicación
+- GitHub Pages desde `main` (raíz): https://ffierron.github.io/Entrenamiento/ — cada `git push` a `main` republica.
+
 ## Probar
 - `node dev-server.mjs` → http://localhost:5173 (configuración `entreno` en `.claude/launch.json`).
