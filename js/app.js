@@ -2,13 +2,14 @@
 import { state, save, uid, resetRoutine, importBackup, wipe } from "./store.js";
 import * as S from "./stats.js";
 import * as T from "./timer.js";
+import { GUIA, CATEGORIAS, guiaPorId } from "./guia.js";
 
 const app = document.getElementById("app");
 const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const TIPOS = { weight_reps: "Peso y reps", reps_only: "Solo reps", duration: "Tiempo", check: "Solo marcar" };
 const KINDS = ["normal", "warmup", "dropset", "failure"];
 const KIND_NAME = { normal: "Normal", warmup: "Calentamiento", dropset: "Dropset", failure: "Al fallo" };
-const NAV_OF = { "": "", dia: "", entreno: "", historial: "historial", sesion: "historial", progreso: "progreso", ejercicio: "progreso", ajustes: "ajustes" };
+const NAV_OF = { "": "", dia: "", entreno: "", historial: "historial", sesion: "historial", progreso: "progreso", ejercicio: "progreso", guia: "guia", ajustes: "ajustes" };
 
 let editMode = false, editNext = false, ticker = null, wakeLock = null;
 
@@ -72,6 +73,14 @@ function bestLine(k, type) {
   return r.maxWeight ? `<span class="pr-line">Récord: ${kg(r.maxWeight)} kg · 1RM est. ${kg(r.best1rm)} kg</span>` : "";
 }
 
+// Botones que llevan a la guía del ejercicio (uno por cada id de `guia`).
+function guiaBtns(ids) {
+  const gs = (ids || []).map(guiaPorId).filter(Boolean);
+  if (!gs.length) return "";
+  return `<div class="guia-links">${gs.map((g) =>
+    `<a class="chip" href="#/guia/${g.id}">ⓘ ${gs.length > 1 ? esc(g.nombre.split(" (")[0]) : "Ver cómo se hace"}</a>`).join("")}</div>`;
+}
+
 // ---------- pantallas ----------
 function home() {
   const r = state.routine, today = new Date().getDay();
@@ -104,6 +113,7 @@ function day() {
         <strong>${i + 1}. ${esc(e.name)}</strong>
         <span class="muted small">${esc(target(e))}</span>
         ${resolve(e).notes ? `<p class="note">${esc(resolve(e).notes)}</p>` : ""}
+        ${guiaBtns(e.guia)}
         ${bestLine(S.key(e.name), e.type)}
       </div>`).join("") : `<p class="muted">Este día no tiene ejercicios todavía.</p>`}
     <div class="actions">
@@ -175,6 +185,7 @@ function exerciseBlock(e, ei) {
     <strong>${esc(e.name)}</strong>
     <span class="muted small">${esc(e.target)}</span>
     ${e.notes ? `<p class="note">${esc(e.notes)}</p>` : ""}
+    ${guiaBtns(e.guia)}
     ${goal}
     <div class="sets t-${e.type}">
       <div class="set head"><span>Serie</span><span>Anterior</span>${cols.map((c) => `<span>${c}</span>`).join("")}<span></span></div>
@@ -268,6 +279,35 @@ function chart(pts, unit) {
   </svg><p class="muted small center">${unit}</p>`;
 }
 
+function guiaView() {
+  const id = route().param;
+  if (id) return guiaDetalle(id);
+  return `<header class="top"><h1>Guía de ejercicios</h1><p class="muted">${GUIA.length} ejercicios con explicación y foto</p></header>
+    <input class="search" type="search" placeholder="Buscar ejercicio o músculo…" data-field="guia-q" aria-label="Buscar ejercicio">
+    ${CATEGORIAS.map((cat) => `<section class="guia-cat"><h2>${cat}</h2>
+      ${GUIA.filter((g) => g.cat === cat).map((g) => `<a class="card guia-item" href="#/guia/${g.id}" data-buscar="${esc((g.nombre + " " + g.musculos).toLowerCase())}">
+        ${g.foto ? `<img src="${g.foto.src}" alt="" loading="lazy">` : `<span class="noimg">▶</span>`}
+        <span><strong>${esc(g.nombre)}</strong><span class="muted small">${esc(g.musculos)}</span></span>
+      </a>`).join("")}</section>`).join("")}`;
+}
+
+function guiaDetalle(id) {
+  const g = guiaPorId(id);
+  if (!g) return notFound();
+  const enRutina = state.routine.days.filter((d) => d.exercises.some((e) => e.guia?.includes(id)));
+  const video = `https://www.youtube.com/results?search_query=${encodeURIComponent(g.video || g.nombre + " técnica")}`;
+  const lista = (titulo, items, cls) => items?.length ? `<h2>${titulo}</h2><ul class="${cls}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : "";
+  return `<header class="top"><a href="#/guia" class="back" data-action="back">‹ Volver</a><h1>${esc(g.nombre)}</h1><p class="muted">${esc(g.musculos)}</p></header>
+    ${g.foto ? `<figure class="guia-foto"><img src="${g.foto.src}" alt="${esc(g.nombre)}">
+        <figcaption>Foto: ${esc(g.foto.autor)} · ${esc(g.foto.licencia)} · <a href="${g.foto.fuente}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption></figure>`
+      : `<p class="muted small">No hay una foto con licencia libre para este ejercicio; mira un video de referencia.</p>`}
+    <a class="btn block" href="${video}" target="_blank" rel="noopener">▶ Buscar video en YouTube</a>
+    <h2>Cómo se hace</h2><ol class="pasos">${g.pasos.map((p) => `<li>${esc(p)}</li>`).join("")}</ol>
+    ${lista("Consejos", g.consejos, "consejos")}
+    ${lista("Errores comunes", g.errores, "errores")}
+    ${enRutina.length ? `<h2>En tu rutina</h2>${enRutina.map((d) => `<a class="chip" href="#/dia/${encodeURIComponent(d.id)}">${esc(d.title)}</a>`).join(" ")}` : ""}`;
+}
+
 function settings() {
   return `<header class="top"><h1>Ajustes</h1></header>
     <label class="field">Nombre de la rutina<input data-field="routine" data-k="name" value="${esc(state.routine.name)}"></label>
@@ -302,7 +342,7 @@ function activeExercise(base) {
   const type = e.type || "weight_reps";
   const weekly = !!e.weekly; // con objetivo semanal manda el objetivo, no lo de la vez anterior
   return {
-    key: k, name: e.name, type, rest: e.rest ?? 90, target: target(base), notes: e.notes || "",
+    key: k, name: e.name, type, rest: e.rest ?? 90, target: target(base), notes: e.notes || "", guia: e.guia || [],
     goal: e.weekly?.goal ? reps : null,
     prev: prev ? prev.sets : [],
     // Cada serie se pre-rellena con lo que hiciste la última vez (o con el objetivo de la rutina).
@@ -358,6 +398,8 @@ async function keepAwake() {
 // ---------- acciones (botones con data-action) ----------
 const actions = {
   start: (el) => startWorkout(el.dataset.day),
+  // "Volver" desde la guía: regresa a donde estabas (rutina o entreno); si no hay historial, a la lista.
+  back: () => { if (prevHash !== null) history.back(); else location.hash = "#/guia"; },
   "edit-on": () => { editMode = true; render(); },
   "edit-off": () => { editMode = false; render(); },
   "day-add": () => {
@@ -433,6 +475,10 @@ function onField(el, isChange) {
   if (field === "set") {
     state.active.exercises[+el.dataset.ei].sets[+el.dataset.si][k] = num(v);
     save();
+  } else if (field === "guia-q") {
+    const q = v.trim().toLowerCase();
+    document.querySelectorAll(".guia-item").forEach((a) => { a.hidden = q && !a.dataset.buscar.includes(q); });
+    document.querySelectorAll(".guia-cat").forEach((s) => { s.hidden = !s.querySelector(".guia-item:not([hidden])"); });
   } else if (field === "week") {
     // Fija el inicio del programa para que la semana actual sea la elegida.
     state.programStart = mondayOf(Date.now()) - (+v - 1) * 7 * DAY_MS;
@@ -455,7 +501,7 @@ function onField(el, isChange) {
 function render() {
   clearInterval(ticker); ticker = null;
   const { view } = route();
-  const views = { "": home, dia: day, entreno: workout, historial: historyView, sesion: sessionView, progreso: progress, ejercicio: exerciseView, ajustes: settings };
+  const views = { "": home, dia: day, entreno: workout, historial: historyView, sesion: sessionView, progreso: progress, ejercicio: exerciseView, guia: guiaView, ajustes: settings };
   app.innerHTML = (views[view] || home)();
   document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.nav === (NAV_OF[view] ?? "")));
   if (view === "entreno" && state.active) {
@@ -493,7 +539,16 @@ app.addEventListener("change", async (e) => {
 // Al tocar un campo numérico, selecciona su contenido para escribir encima directamente.
 app.addEventListener("focusin", (e) => { if (e.target.classList?.contains("num")) e.target.select(); });
 
-window.addEventListener("hashchange", () => { editMode = editNext; editNext = false; window.scrollTo(0, 0); render(); });
+// Recuerda el scroll de cada pantalla: al volver de la guía al entreno, quedas donde estabas.
+const scrollPos = {};
+let curHash = location.hash, prevHash = null;
+window.addEventListener("scroll", () => { scrollPos[curHash] = window.scrollY; }, { passive: true });
+window.addEventListener("hashchange", () => {
+  editMode = editNext; editNext = false;
+  prevHash = curHash; curHash = location.hash;
+  render();
+  window.scrollTo(0, scrollPos[curHash] ?? 0);
+});
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && route().view === "entreno") { wakeLock = null; keepAwake(); } });
 
 if (!state.programStart) { state.programStart = mondayOf(Date.now()); save(); } // semana 1 = esta semana

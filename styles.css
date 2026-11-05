@@ -113,6 +113,23 @@ h2 { font-size: 1.05rem; margin: 24px 0 8px; color: var(--muted); font-weight: 6
 .kind-txt { font-size: .75rem; color: var(--warm); }
 .setlist { margin: 6px 0 0; padding-left: 22px; color: var(--text); font-size: .95rem; }
 
+/* Guía de ejercicios */
+.guia-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.chip { display: inline-block; font-size: .82rem; font-weight: 600; color: var(--accent); background: #1d2a12; border: 1px solid #3d5c1a; border-radius: 999px; padding: 5px 10px; }
+.search { font: inherit; width: 100%; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 12px; min-height: 46px; margin-bottom: 4px; }
+.guia-item { flex-direction: row; align-items: center; gap: 12px; padding: 10px; }
+.guia-item[hidden], .guia-cat[hidden] { display: none; }
+.guia-item img, .guia-item .noimg { width: 64px; height: 64px; flex-shrink: 0; border-radius: 10px; object-fit: cover; background: #fff; }
+.guia-item .noimg { display: grid; place-items: center; background: var(--surface-2); color: var(--muted); }
+.guia-item > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.guia-foto { margin: 0 0 4px; }
+.guia-foto img { width: 100%; max-height: 360px; object-fit: contain; background: #fff; border-radius: var(--radius); }
+.guia-foto figcaption { font-size: .72rem; color: var(--muted); margin-top: 4px; }
+.guia-foto a { color: var(--accent); }
+.pasos, .consejos, .errores { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+.consejos li::marker { color: var(--accent); }
+.errores li::marker { color: var(--danger); }
+
 /* Estadísticas */
 .stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .stats3 div { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; }
@@ -145,6 +162,6 @@ h2 { font-size: 1.05rem; margin: 24px 0 8px; color: var(--muted); font-weight: 6
   background: var(--surface); border-top: 1px solid var(--border);
   padding-bottom: env(safe-area-inset-bottom); height: calc(var(--nav-h) + env(safe-area-inset-bottom));
 }
-.nav a { flex: 1; max-width: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: .72rem; color: var(--muted); }
+.nav a { flex: 1; max-width: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: .72rem; color: var(--muted); }
 .nav svg { width: 24px; height: 24px; fill: currentColor; }
 .nav a.on { color: var(--accent); }
