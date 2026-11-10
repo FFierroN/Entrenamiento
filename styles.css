@@ -130,6 +130,11 @@ h2 { font-size: 1.05rem; margin: 24px 0 8px; color: var(--muted); font-weight: 6
 .consejos li::marker { color: var(--accent); }
 .errores li::marker { color: var(--danger); }
 
+.dificultad { margin: 8px 0 0; font-size: .85rem; color: var(--muted); }
+.dificultad span { color: var(--accent); letter-spacing: 2px; margin-left: 4px; }
+.dificultad i { font-style: normal; color: var(--border); }
+.texto { margin: 0; }
+
 /* Estadísticas */
 .stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .stats3 div { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; }

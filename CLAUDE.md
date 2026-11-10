@@ -20,6 +20,7 @@
 - `js/guia.js`: explicaciones propias en español + foto por ejercicio. Cada ejercicio de la rutina enlaza con `guia: [ids]`.
 - Fotos solo con licencia libre de Wikimedia Commons, guardadas en `img/ejercicios/` (`tools/convertir-fotos.ps1`) y siempre con crédito (autor, licencia, enlace). No copiar textos ni fotos con copyright.
 - Si no hay foto libre, el ejercicio usa `video` (búsqueda en YouTube).
+- DAREBEE: solo enlaces (`darebee: {slug, similar?}`), abiertos con Google Translate. Sus términos prohíben incluir su material en apps: no copiar sus imágenes ni textos.
 
 ## Service worker
 - Si cambias archivos de la app, sube `CACHE` en `sw.js` y añade los archivos nuevos a `ASSETS`.

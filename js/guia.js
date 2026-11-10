@@ -1,5 +1,7 @@
 // Guía de ejercicios: explicaciones propias + fotos con licencia libre de Wikimedia Commons.
 // Las fotos se guardan en img/ejercicios/ (redimensionadas) para que funcionen sin internet.
+// `darebee` solo enlaza a su ficha (sus términos no permiten incluir su material en apps).
+// `dificultad` (1-5) es una estimación propia para principiantes.
 // Cada foto lleva su crédito, como exigen sus licencias (CC BY / CC BY-SA / GPL / dominio público).
 
 const C = "https://commons.wikimedia.org/wiki/File:";
@@ -12,6 +14,9 @@ export const GUIA = [
   {
     id: "escapulas", nombre: "Retracción y protracción de escápulas", cat: "Calentamiento",
     musculos: "Trapecio, romboides, serrato anterior",
+    dificultad: 1, respiracion: "Exhala al juntar los omóplatos e inhala al separarlos.",
+    facil: "Hazlo solo de pie, frente a una pared.",
+    dificil: "Haz más lenta cada repetición y sostén 2 s en cada extremo.",
     foto: foto("escapulas.jpg", "U.S. Space Force photo by Van Ha", "Dominio público", "Guardian_Arena_2025-_Where_Space_Power_Meets_Warrior_Grit_(9262533).jpg"),
     pasos: [
       "Retracción: junta los omóplatos hacia atrás, como si quisieras sujetar un lápiz entre ellos.",
@@ -25,6 +30,10 @@ export const GUIA = [
   {
     id: "split-squat", nombre: "Split squat elevado (búlgara)", cat: "Calentamiento",
     musculos: "Cuádriceps, glúteos, aductores",
+    dificultad: 3, respiracion: "Inhala al bajar y exhala al subir.",
+    facil: "Pon el pie de atrás en un apoyo más bajo o apóyate en una pared.",
+    dificil: "Baja en 3 segundos y haz una pausa abajo.",
+    darebee: {"slug":"split-lunges","similar":"Split lunges"},
     video: "bulgarian split squat sin peso técnica",
     pasos: [
       "De espaldas a un banco o escalón, apoya el empeine del pie de atrás encima.",
@@ -38,6 +47,10 @@ export const GUIA = [
   {
     id: "sentadilla-isometrica", nombre: "Sentadilla isométrica", cat: "Calentamiento",
     musculos: "Cuádriceps, glúteos",
+    dificultad: 2, respiracion: "Respira suave y continuo, sin aguantar el aire.",
+    facil: "Apoya la espalda en una pared y baja menos.",
+    dificil: "Baja hasta que los muslos queden paralelos y suma segundos.",
+    darebee: {"slug":"squat-hold"},
     video: "sentadilla isométrica wall sit técnica",
     pasos: [
       "Baja a posición de sentadilla, con los muslos lo más cerca posible de quedar paralelos al suelo.",
@@ -52,6 +65,9 @@ export const GUIA = [
   {
     id: "dominada-australiana", nombre: "Dominada australiana (remo invertido)", cat: "Tirón y empuje",
     musculos: "Dorsales, romboides, bíceps, deltoides posterior",
+    dificultad: 2, respiracion: "Exhala al tirar e inhala al bajar.",
+    facil: "Ponte más vertical, con la barra más alta.",
+    dificil: "Ponte más horizontal o eleva los pies.",
     foto: foto("dominada-australiana.jpg", "Colossus Fitness", "CC BY 3.0", "Inverted_row.jpg"),
     pasos: [
       "Ponte bajo una barra baja (o mesa firme) y agárrala con las manos al ancho de los hombros.",
@@ -65,6 +81,10 @@ export const GUIA = [
   {
     id: "push-up", nombre: "Push up (flexión de brazos)", cat: "Tirón y empuje",
     musculos: "Pectorales, tríceps, deltoides anterior, core",
+    dificultad: 3, respiracion: "Inhala al bajar y exhala al empujar.",
+    facil: "Apoya las manos en una superficie elevada o las rodillas en el suelo.",
+    dificil: "Baja en 3 segundos y haz una pausa abajo.",
+    darebee: {"slug":"push-ups"},
     foto: foto("push-up.jpg", "PTPioneer", "CC BY 2.0", "Girl_doing_push-ups_from_the_side.jpg"),
     pasos: [
       "Manos en el suelo algo más abiertas que los hombros, brazos estirados.",
@@ -78,6 +98,9 @@ export const GUIA = [
   {
     id: "dominada-excentrica", nombre: "Dominada excéntrica", cat: "Tirón y empuje",
     musculos: "Dorsales, bíceps, antebrazos",
+    dificultad: 4, respiracion: "Exhala lentamente durante toda la bajada.",
+    facil: "Apoya un pie en una silla para quitar algo de peso.",
+    dificil: "Alarga la bajada a 8-10 segundos.",
     foto: foto("dominada.jpg", "PTPioneer", "CC BY 2.0", "Pull-ups_exercise_from_back.jpg"),
     pasos: [
       "Empieza arriba, con la barbilla sobre la barra (sube saltando o con un apoyo).",
@@ -90,6 +113,10 @@ export const GUIA = [
   {
     id: "push-up-excentrica", nombre: "Push up excéntrica", cat: "Tirón y empuje",
     musculos: "Pectorales, tríceps, deltoides anterior, core",
+    dificultad: 2, respiracion: "Exhala lentamente durante la bajada e inhala al volver arriba.",
+    facil: "Apoya las manos en una superficie inclinada.",
+    dificil: "Baja en el suelo, sostén abajo y sube sin apoyar las rodillas.",
+    darebee: {"slug":"push-ups","similar":"Push-ups normales"},
     foto: foto("push-up.jpg", "PTPioneer", "CC BY 2.0", "Girl_doing_push-ups_from_the_side.jpg"),
     pasos: [
       "Posición de push up (en el suelo o con las manos en una superficie inclinada).",
@@ -105,6 +132,9 @@ export const GUIA = [
   {
     id: "hollow", nombre: "Medio hollow / hollow hold", cat: "Core",
     musculos: "Recto abdominal, oblicuos, flexores de cadera",
+    dificultad: 3, respiracion: "Respira corto y continuo sin soltar el abdomen.",
+    facil: "Dobla las rodillas y deja los brazos hacia los pies.",
+    dificil: "Estira piernas y brazos, cerca del suelo.",
     video: "hollow body hold principiante técnica",
     pasos: [
       "Acostado boca arriba, pega la zona lumbar al suelo apretando el abdomen.",
@@ -118,6 +148,10 @@ export const GUIA = [
   {
     id: "nadadores", nombre: "Nadadores (superman)", cat: "Core",
     musculos: "Erectores espinales, glúteos, dorsales, deltoides posterior",
+    dificultad: 2, respiracion: "Exhala al subir e inhala al bajar.",
+    facil: "Levanta primero solo el pecho y luego solo las piernas.",
+    dificil: "Sostén arriba 3-5 segundos en cada repetición.",
+    darebee: {"slug":"superman-hold"},
     foto: foto("nadadores.jpg", "Nikiwiki242", "CC BY-SA 4.0 (foto recortada y redimensionada)", "Salabhasana_(cropped).jpg"),
     pasos: [
       "Boca abajo, con los brazos estirados hacia adelante.",
@@ -131,6 +165,10 @@ export const GUIA = [
   {
     id: "toques-hombro", nombre: "Toques de hombro", cat: "Core",
     musculos: "Core (anti-rotación), hombros, tríceps",
+    dificultad: 3, respiracion: "Exhala en cada toque, sin aguantar el aire.",
+    facil: "Separa más los pies o apoya las manos en un banco.",
+    dificil: "Junta los pies y toca más lento.",
+    darebee: {"slug":"shoulder-taps"},
     foto: foto("toques-hombro.jpg", "U.S. Army 10AAMDC by Sgt. Yesenia Cadavid", "Dominio público", "10th_AAMDC_host_%E2%80%9CKey_Leader_Physical_Readiness_Training%E2%80%9D_(8448514).jpg"),
     pasos: [
       "Posición de plancha alta (brazos estirados), pies algo separados.",
@@ -143,6 +181,10 @@ export const GUIA = [
   {
     id: "mountain-climbers", nombre: "Mountain climbers (escaladores)", cat: "Core",
     musculos: "Core, flexores de cadera, hombros; eleva el pulso",
+    dificultad: 3, respiracion: "Mantén una respiración rítmica con el paso de las piernas.",
+    facil: "Apoya las manos en una superficie elevada y ve más lento.",
+    dificil: "Aumenta el ritmo sin levantar la cadera.",
+    darebee: {"slug":"climbers"},
     foto: foto("mountain-climbers.jpg", "U.S. Army photo by Pfc. Cheshaon Jones", "Dominio público", "SETAF-AF_NCOs_conduct_physical_readiness_training_(9713992).jpg"),
     pasos: [
       "Posición de plancha alta, manos bajo los hombros.",
@@ -157,6 +199,10 @@ export const GUIA = [
   {
     id: "sentadilla", nombre: "Sentadilla (squat)", cat: "Piernas",
     musculos: "Cuádriceps, glúteos, isquiotibiales, core",
+    dificultad: 2, respiracion: "Inhala al bajar y exhala al subir.",
+    facil: "Baja menos o siéntate en una silla.",
+    dificil: "Baja en 3 segundos y haz una pausa abajo.",
+    darebee: {"slug":"squats"},
     foto: foto("sentadilla.jpg", "U.S. Marine Corps photo by Lance Cpl. Phuchung Nguyen", "Dominio público", "Marine_Corps_officer_candidate_participate_in_physical_training.jpg"),
     pasos: [
       "Pies al ancho de los hombros, puntas un poco hacia afuera.",
@@ -170,6 +216,10 @@ export const GUIA = [
   {
     id: "box-squat", nombre: "Box squat (sentadilla al cajón)", cat: "Piernas",
     musculos: "Cuádriceps, glúteos, isquiotibiales",
+    dificultad: 1, respiracion: "Inhala al bajar y exhala al subir.",
+    facil: "Usa un asiento más alto.",
+    dificil: "Usa un asiento más bajo y solo roza con los glúteos.",
+    darebee: {"slug":"squats","similar":"Sentadilla sin cajón"},
     foto: foto("box-squat.jpg", "BruceBlaus", "CC BY-SA 4.0 (redimensionada)", "Exercise_Chair_Squat.png"),
     pasos: [
       "Ponte delante de una silla, banco o cajón firme.",
@@ -182,6 +232,10 @@ export const GUIA = [
   {
     id: "estocada", nombre: "Estocada (lunge)", cat: "Piernas",
     musculos: "Cuádriceps, glúteos, isquiotibiales",
+    dificultad: 3, respiracion: "Inhala al bajar y exhala al volver.",
+    facil: "Hazla en el sitio, sin dar el paso, y apóyate en una pared.",
+    dificil: "Da pasos caminando o baja más lento.",
+    darebee: {"slug":"forward-lunges"},
     foto: foto("estocada.jpg", "Yashjoshi2102", "CC BY-SA 4.0 (redimensionada)", "Sakshi_Malik_fitness_(lunge).jpg"),
     pasos: [
       "De pie, da un paso largo hacia adelante.",
@@ -195,6 +249,10 @@ export const GUIA = [
   {
     id: "puente-gluteo", nombre: "Puente glúteo", cat: "Piernas",
     musculos: "Glúteos, isquiotibiales, core",
+    dificultad: 1, respiracion: "Exhala al subir e inhala al bajar.",
+    facil: "Reduce la altura y el tiempo arriba.",
+    dificil: "Sostén arriba hasta 5 segundos o hazlo a una pierna.",
+    darebee: {"slug":"bridges"},
     foto: foto("puente-gluteo.jpg", "Everkinetic", "CC BY-SA 3.0 (redimensionada)", "Bridge-2.png"),
     pasos: [
       "Boca arriba, rodillas dobladas y pies apoyados al ancho de la cadera.",
@@ -208,6 +266,10 @@ export const GUIA = [
   {
     id: "gemelos", nombre: "Elevación de gemelos (calf raise)", cat: "Piernas",
     musculos: "Gemelos y sóleo",
+    dificultad: 1, respiracion: "Exhala al subir e inhala al bajar.",
+    facil: "Hazlo en el suelo plano y con apoyo.",
+    dificil: "Hazlo a una pierna o sobre un escalón.",
+    darebee: {"slug":"calf-raises"},
     foto: foto("gemelos.jpg", "GeorgeStepanek", "CC BY-SA 3.0 (redimensionada)", "DumbbellStandingCalfRaise.JPG"),
     pasos: [
       "De pie, con las puntas de los pies sobre un escalón y los talones en el aire (o en el suelo plano).",
@@ -220,6 +282,9 @@ export const GUIA = [
   {
     id: "tibial", nombre: "Elevación de tibial (tibialis raise)", cat: "Piernas",
     musculos: "Tibial anterior (parte delantera de la canilla)",
+    dificultad: 1, respiracion: "Respira normal, con ritmo constante.",
+    facil: "Acerca los pies a la pared.",
+    dificil: "Aleja los pies de la pared o sostén 2 s arriba.",
     video: "tibialis raise contra la pared técnica",
     pasos: [
       "Apoya la espalda en una pared con los pies a unos 30-50 cm de ella.",
@@ -232,6 +297,10 @@ export const GUIA = [
   {
     id: "step-up", nombre: "Step up (subida al cajón)", cat: "Piernas",
     musculos: "Cuádriceps, glúteos",
+    dificultad: 2, respiracion: "Exhala al subir e inhala al bajar.",
+    facil: "Usa un escalón más bajo.",
+    dificil: "Usa un peldaño más alto y baja en 3 segundos.",
+    darebee: {"slug":"lunge-step-ups","similar":"Lunge step-ups"},
     foto: foto("step-up.jpg", "Everkinetic", "CC BY-SA 3.0 (redimensionada)", "Step-ups-2-2-553x1024.png"),
     pasos: [
       "Ponte frente a un escalón, banco o cajón firme.",
@@ -247,6 +316,10 @@ export const GUIA = [
   {
     id: "jumping-jacks", nombre: "Jumping jacks (saltos de tijera)", cat: "Cardio",
     musculos: "Cuerpo completo; cardio",
+    dificultad: 1, respiracion: "Respira de forma regular, sin aguantar el aire.",
+    facil: "Sin saltar: abre una pierna cada vez.",
+    dificil: "Sube el ritmo manteniendo el aterrizaje suave.",
+    darebee: {"slug":"jumping-jacks"},
     foto: foto("jumping-jacks.jpg", "Lance Cpl. Ryan M. Joyner", "Dominio público", "Elementary_school_students_conduct_jumping_jacks_to_warm_up_USMC-120214-M-MA421-288.jpg"),
     pasos: [
       "De pie, pies juntos y brazos a los lados.",
@@ -259,6 +332,9 @@ export const GUIA = [
   {
     id: "trote", nombre: "Trote suave", cat: "Cardio",
     musculos: "Cardio",
+    dificultad: 1, respiracion: "Respira cómodo: deberías poder hablar.",
+    facil: "Alterna trote y caminata.",
+    dificil: "Alarga el tiempo antes de subir la velocidad.",
     foto: foto("trote.jpg", "James Moore200", "CC BY-SA 4.0 (redimensionada)", "Jogger_on_the_street.jpg"),
     pasos: [
       "Corre a un ritmo en el que puedas hablar sin ahogarte.",
@@ -271,6 +347,10 @@ export const GUIA = [
   {
     id: "burpees", nombre: "Burpees", cat: "Cardio",
     musculos: "Cuerpo completo; cardio",
+    dificultad: 4, respiracion: "Exhala al saltar y al empujar; inhala al bajar.",
+    facil: "Da los pasos de a uno y no saltes al final.",
+    dificil: "Agrega un push up y salta más alto.",
+    darebee: {"slug":"burpees"},
     foto: foto("burpees.jpg", "Marine Corps photo by Sgt. Ryan Young", "Dominio público", "Airborne_Burpee.jpg"),
     pasos: [
       "De pie, baja en cuclillas y apoya las manos en el suelo.",
@@ -286,6 +366,9 @@ export const GUIA = [
   {
     id: "estir-gemelo", nombre: "Estiramiento de gemelo", cat: "Estiramientos",
     musculos: "Gemelos y sóleo",
+    dificultad: 1, respiracion: "Respira profundo y suelta el aire al inclinarte.",
+    facil: "Acerca el pie de atrás a la pared.",
+    dificil: "Aleja el pie de atrás manteniendo el talón abajo.",
     video: "estiramiento de gemelo contra la pared",
     pasos: [
       "Frente a una pared, apoya las manos en ella.",
@@ -298,6 +381,9 @@ export const GUIA = [
   {
     id: "estir-isquios", nombre: "Estiramiento de isquiotibiales", cat: "Estiramientos",
     musculos: "Isquiotibiales (parte trasera del muslo)",
+    dificultad: 1, respiracion: "Exhala al inclinarte y respira profundo al sostener.",
+    facil: "Usa un apoyo más bajo y dobla un poco la rodilla.",
+    dificil: "Usa un apoyo algo más alto, con la espalda recta.",
     foto: foto("estir-isquios.jpg", "Shixart1985", "CC BY 2.0", "Woman_stretching_her_hamstrings_and_glutes_on_a_log_in_nature.jpg"),
     pasos: [
       "Apoya el talón de una pierna estirada sobre un escalón o banco bajo.",
@@ -310,6 +396,9 @@ export const GUIA = [
   {
     id: "estir-cuadriceps", nombre: "Estiramiento de cuádriceps", cat: "Estiramientos",
     musculos: "Cuádriceps (parte delantera del muslo)",
+    dificultad: 1, respiracion: "Respira lento y profundo.",
+    facil: "Apóyate en una pared o hazlo acostado de lado.",
+    dificil: "Lleva la cadera un poco hacia adelante.",
     foto: foto("estir-cuadriceps.jpg", "U.S. Marine Corps", "Dominio público", "USMC-09294.jpg"),
     pasos: [
       "De pie, apóyate en una pared si lo necesitas.",
@@ -322,6 +411,9 @@ export const GUIA = [
   {
     id: "estir-psoas", nombre: "Estiramiento de psoas (flexor de cadera)", cat: "Estiramientos",
     musculos: "Psoas ilíaco, flexores de cadera",
+    dificultad: 1, respiracion: "Exhala al llevar la cadera adelante.",
+    facil: "Reduce el avance y deja las manos en el muslo.",
+    dificil: "Sube el brazo e inclínate un poco al lado contrario.",
     foto: foto("estir-psoas.jpg", "Hanako.R", "CC BY-SA 4.0 (redimensionada)", "J%C3%B3ga_Anjaneyasana.jpg"),
     pasos: [
       "Posición de estocada con la rodilla de atrás apoyada en el suelo (sobre algo blando).",
@@ -334,6 +426,9 @@ export const GUIA = [
   {
     id: "postura-nino", nombre: "Postura del niño", cat: "Estiramientos",
     musculos: "Zona lumbar, dorsales, caderas",
+    dificultad: 1, respiracion: "Inhala expandiendo la espalda y exhala soltando.",
+    facil: "Pon un cojín entre glúteos y talones.",
+    dificil: "Camina las manos más lejos para estirar los dorsales.",
     foto: foto("postura-nino.jpg", "Iveto", "CC BY-SA 4.0 (redimensionada)", "Balasana.JPG"),
     pasos: [
       "De rodillas, siéntate sobre los talones.",
@@ -347,6 +442,9 @@ export const GUIA = [
   {
     id: "cobra", nombre: "Estiramiento cobra", cat: "Estiramientos",
     musculos: "Abdominales, flexores de cadera, pecho",
+    dificultad: 1, respiracion: "Inhala al subir y respira suave al sostener.",
+    facil: "Apóyate sobre los antebrazos.",
+    dificil: "Estira más los brazos, sin molestia lumbar.",
     foto: foto("cobra.jpg", "Marcocarvalho", "CC BY 3.0", "Raja_bhujangasana_2.jpg"),
     pasos: [
       "Boca abajo, manos apoyadas bajo los hombros.",
@@ -359,6 +457,10 @@ export const GUIA = [
   {
     id: "cadena-posterior", nombre: "Estiramiento de cadena posterior", cat: "Estiramientos",
     musculos: "Isquiotibiales, gemelos, espalda",
+    dificultad: 1, respiracion: "Exhala al bajar y deja que cada exhalación te suelte.",
+    facil: "Dobla las rodillas y apoya las manos en los muslos.",
+    dificil: "Estira más las piernas sin rebotar.",
+    darebee: {"slug":"forward-bends"},
     foto: foto("cadena-posterior.jpg", "Nemonoman (Wikipedia en inglés)", "GPL", "Fb1.jpg"),
     pasos: [
       "De pie, pies juntos o al ancho de la cadera.",
@@ -372,6 +474,9 @@ export const GUIA = [
   {
     id: "estir-triceps", nombre: "Estiramiento de tríceps y dorsal", cat: "Estiramientos",
     musculos: "Tríceps, dorsales",
+    dificultad: 1, respiracion: "Respira lento y profundo.",
+    facil: "Acerca el brazo sin empujar tanto el codo.",
+    dificil: "Inclina más el torso al lado contrario.",
     foto: foto("estir-triceps.jpg", "Tyler Read", "CC BY 2.0", "Girl_stretching_triceps_in_a_park.jpg"),
     pasos: [
       "Sube un brazo y dobla el codo para que la mano caiga detrás de la cabeza.",

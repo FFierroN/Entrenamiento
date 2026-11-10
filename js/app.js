@@ -291,6 +291,9 @@ function guiaView() {
       </a>`).join("")}</section>`).join("")}`;
 }
 
+// DAREBEE está en inglés y no tiene versión en español: se abre mediante Google Translate.
+const darebeeUrl = (slug) => `https://darebee-com.translate.goog/exercises/${slug}.html?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=wapp`;
+
 function guiaDetalle(id) {
   const g = guiaPorId(id);
   if (!g) return notFound();
@@ -301,10 +304,16 @@ function guiaDetalle(id) {
     ${g.foto ? `<figure class="guia-foto"><img src="${g.foto.src}" alt="${esc(g.nombre)}">
         <figcaption>Foto: ${esc(g.foto.autor)} · ${esc(g.foto.licencia)} · <a href="${g.foto.fuente}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption></figure>`
       : `<p class="muted small">No hay una foto con licencia libre para este ejercicio; mira un video de referencia.</p>`}
+    ${g.dificultad ? `<p class="dificultad" aria-label="Dificultad ${g.dificultad} de 5">Dificultad <span>${"●".repeat(g.dificultad)}<i>${"●".repeat(5 - g.dificultad)}</i></span></p>` : ""}
     <a class="btn block" href="${video}" target="_blank" rel="noopener">▶ Buscar video en YouTube</a>
+    ${g.darebee ? `<a class="btn block" href="${darebeeUrl(g.darebee.slug)}" target="_blank" rel="noopener">Ver en DAREBEE (traducido)</a>
+      ${g.darebee.similar ? `<p class="muted small center">Variante parecida: ${esc(g.darebee.similar)}</p>` : ""}` : ""}
     <h2>Cómo se hace</h2><ol class="pasos">${g.pasos.map((p) => `<li>${esc(p)}</li>`).join("")}</ol>
+    ${g.respiracion ? `<h2>Respiración</h2><p class="texto">${esc(g.respiracion)}</p>` : ""}
     ${lista("Consejos", g.consejos, "consejos")}
     ${lista("Errores comunes", g.errores, "errores")}
+    ${g.facil ? `<h2>Hacerlo más fácil</h2><p class="texto">${esc(g.facil)}</p>` : ""}
+    ${g.dificil ? `<h2>Hacerlo más difícil</h2><p class="texto">${esc(g.dificil)}</p>` : ""}
     ${enRutina.length ? `<h2>En tu rutina</h2>${enRutina.map((d) => `<a class="chip" href="#/dia/${encodeURIComponent(d.id)}">${esc(d.title)}</a>`).join(" ")}` : ""}`;
 }
 
