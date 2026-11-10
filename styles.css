@@ -135,6 +135,26 @@ h2 { font-size: 1.05rem; margin: 24px 0 8px; color: var(--muted); font-weight: 6
 .dificultad i { font-style: normal; color: var(--border); }
 .texto { margin: 0; }
 
+/* Inicio y grupos */
+.programa { background: var(--surface); border: 1px solid var(--accent); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
+.programa h2 { margin: 0 0 12px; color: var(--text); font-size: 1.3rem; font-weight: 700; }
+.grupos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.grupo { display: flex; flex-direction: column; gap: 4px; min-height: 104px; padding: 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); }
+.grupo:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.titulo-grupo { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.titulo-grupo h1 { min-width: 0; }
+.titulo-grupo .btn { flex-shrink: 0; }
+.card.ej { flex-direction: row; align-items: center; gap: 12px; padding: 10px; }
+.ej-img { width: 76px; height: 76px; flex-shrink: 0; display: grid; place-items: center; text-align: center; font-size: .62rem; line-height: 1.2; color: var(--muted); background: var(--surface-2); border: 1px dashed var(--border); border-radius: 10px; }
+.ej-txt { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ex-head { display: flex; flex-direction: column; gap: 4px; }
+
+/* Ventana emergente */
+.modal-fondo { position: fixed; inset: 0; z-index: 40; background: rgba(0, 0, 0, .65); }
+.modal { position: fixed; z-index: 41; left: 16px; right: 16px; top: 50%; transform: translateY(-50%); max-width: 420px; margin: 0 auto; padding: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; }
+.modal h2 { margin: 0 0 4px; color: var(--text); font-size: 1.15rem; }
+.modal .search { margin-top: 10px; color-scheme: dark; }
+
 /* Estadísticas */
 .stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .stats3 div { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; }

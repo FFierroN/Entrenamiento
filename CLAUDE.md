@@ -11,7 +11,7 @@
 - Tipos de ejercicio: `weight_reps`, `reps_only`, `duration`, `check` (solo marcar). Tipos de serie: `normal`, `warmup`, `dropset`, `failure`.
 
 ## Rutina
-- La rutina incluida es **Método Zero** (programa de 12 semanas, calistenia) en `js/rutina.js`: lun Tirón y empuje, mar Piernas, mié Estiramientos, jue Fullbody, vie Misión repeticiones.
+- La rutina incluida es **Método Zero** (programa de 12 semanas, calistenia) en `js/rutina.js`, con 5 grupos: Tirón y empuje, Piernas, Estiramientos, Fullbody y Misión repeticiones. No van atados a un día: al abrir un grupo se pregunta la fecha para el registro.
 - Solo la sección **Misión repeticiones** tiene objetivos por semana (`weekly`); las progresiones de las demás van en `notes`.
 - La semana del programa se calcula desde `state.programStart` (lunes de inicio) y se puede cambiar en Ajustes.
 - Al cambiar la rutina, **sube `version`** para que se recargue en el dispositivo (solo si el usuario no la editó desde la app).

@@ -11,7 +11,7 @@ const KINDS = ["normal", "warmup", "dropset", "failure"];
 const KIND_NAME = { normal: "Normal", warmup: "Calentamiento", dropset: "Dropset", failure: "Al fallo" };
 const NAV_OF = { "": "", dia: "", entreno: "", historial: "historial", sesion: "historial", progreso: "progreso", ejercicio: "progreso", guia: "guia", ajustes: "ajustes" };
 
-let editMode = false, editNext = false, ticker = null, wakeLock = null;
+let modal = null, editMode = false, editNext = false, ticker = null, wakeLock = null;
 
 // ---------- utilidades ----------
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -73,63 +73,71 @@ function bestLine(k, type) {
   return r.maxWeight ? `<span class="pr-line">Récord: ${kg(r.maxWeight)} kg · 1RM est. ${kg(r.best1rm)} kg</span>` : "";
 }
 
-// Botones que llevan a la guía del ejercicio (uno por cada id de `guia`).
-function guiaBtns(ids) {
-  const gs = (ids || []).map(guiaPorId).filter(Boolean);
+// Atributos para que una caja completa abra la guía (si hay varios movimientos, pregunta cuál).
+function guiaLink(ids) {
+  const gs = (ids || []).filter(guiaPorId);
   if (!gs.length) return "";
-  return `<div class="guia-links">${gs.map((g) =>
-    `<a class="chip" href="#/guia/${g.id}">ⓘ ${gs.length > 1 ? esc(g.nombre.split(" (")[0]) : "Ver cómo se hace"}</a>`).join("")}</div>`;
+  return gs.length === 1 ? `href="#/guia/${gs[0]}"` : `href="#" data-action="guia-pick" data-ids="${gs.join(",")}"`;
+}
+
+// Fechas en formato local AAAA-MM-DD
+const isoLocal = (ts) => { const d = new Date(ts); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const fromIso = (iso) => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d); };
+const pickedDate = (dayId) => (state.picked?.dayId === dayId ? state.picked.date : isoLocal(Date.now()));
+
+function modalView() {
+  if (!modal) return "";
+  const body = modal.type === "fecha"
+    ? `<h2>¿Qué día es?</h2><p class="muted small">${esc(state.routine.days.find((d) => d.id === modal.day)?.title)}: esta fecha quedará en el registro.</p>
+       <input class="search" type="date" id="fecha" value="${isoLocal(Date.now())}" max="${isoLocal(Date.now())}" aria-label="Fecha del entreno">
+       <div class="actions"><button class="btn" data-action="modal-close">Cancelar</button><button class="btn primary" data-action="fecha-ok">Continuar</button></div>`
+    : `<h2>¿Qué movimiento quieres ver?</h2>${modal.ids.map((id) => `<a class="btn block" href="#/guia/${id}">${esc(guiaPorId(id).nombre)}</a>`).join("")}
+       <button class="btn block ghost" data-action="modal-close">Cancelar</button>`;
+  return `<div class="modal-fondo" data-action="modal-close"></div><div class="modal" role="dialog" aria-modal="true">${body}</div>`;
 }
 
 // ---------- pantallas ----------
 function home() {
-  const r = state.routine, today = new Date().getDay();
-  const hoy = r.days.find((d) => d.weekday === today);
-  let h = `<header class="top"><h1>Hoy</h1><p class="muted">${DIAS[today]}, ${new Date().toLocaleDateString("es", { day: "numeric", month: "long" })}</p></header>`;
+  const r = state.routine;
+  let h = `<header class="top"><h1>Inicio</h1></header>`;
   if (state.active) h += `<a class="card accent" href="#/entreno"><strong>Entreno en curso</strong><span>${esc(state.active.title)} · continuar →</span></a>`;
-  h += hoy ? dayCard(hoy, true)
-    : `<div class="card"><strong>Día de descanso</strong><span class="muted small">No hay entreno asignado para hoy. Puedes elegir cualquier día de la semana.</span></div>`;
-  h += `<h2>${esc(r.name)}</h2>${r.days.map((d) => dayCard(d, false)).join("")}`;
-  h += `<button class="btn block ghost" data-action="day-add">+ Añadir día</button>`;
+  h += `<section class="programa"><h2>${esc(r.name)}</h2><div class="grupos">${r.days.map(groupBox).join("")}</div></section>`;
+  h += `<button class="btn block ghost" data-action="day-add">+ Añadir grupo</button>`;
   return h;
 }
 
-function dayCard(d, big) {
+function groupBox(d) {
   const last = lastDone(d.id);
-  return `<a class="card ${big ? "big" : ""}" href="#/dia/${encodeURIComponent(d.id)}">
-      <div class="row"><span class="tag">${d.weekday != null ? DIAS[d.weekday] : "Sin día fijo"}</span>${last ? `<span class="muted small">hecho ${fmtDate(last.start)}</span>` : ""}</div>
+  // Con un entreno en curso no se vuelve a preguntar la fecha.
+  const link = state.active ? `href="#/dia/${encodeURIComponent(d.id)}"` : `href="#" data-action="pick-day" data-day="${esc(d.id)}"`;
+  return `<a class="grupo" ${link}>
       <strong>${esc(d.title)}</strong>
-      <span class="muted small">${d.exercises.length} ejercicios${big ? " · " + d.exercises.map((e) => esc(e.name)).join(", ") : ""}</span>
-    </a>
-    ${big && !state.active ? `<button class="btn primary block" data-action="start" data-day="${esc(d.id)}">Empezar entreno</button>` : ""}`;
+      <span class="muted small">${d.exercises.length} ejercicios</span>
+      ${last ? `<span class="muted small">Último: ${fmtDate(last.start)}</span>` : ""}
+    </a>`;
 }
 
 function day() {
   const d = currentDay();
   if (!d) return notFound();
   if (editMode) return dayEdit(d);
-  return `<header class="top"><a href="#/" class="back">‹ Hoy</a><h1>${esc(d.title)}</h1><p class="muted">${d.weekday != null ? DIAS[d.weekday] : "Sin día fijo"}${hasWeekly(d) ? ` · semana ${programWeek()} de ${WEEKS}` : ""}</p></header>
-    ${d.exercises.length ? d.exercises.map((e, i) => `<div class="card">
-        <strong>${i + 1}. ${esc(e.name)}</strong>
-        <span class="muted small">${esc(target(e))}</span>
-        ${resolve(e).notes ? `<p class="note">${esc(resolve(e).notes)}</p>` : ""}
-        ${guiaBtns(e.guia)}
-        ${bestLine(S.key(e.name), e.type)}
-      </div>`).join("") : `<p class="muted">Este día no tiene ejercicios todavía.</p>`}
-    <div class="actions">
-      ${state.active ? `<a class="btn primary" href="#/entreno">Continuar entreno en curso</a>`
-        : `<button class="btn primary" data-action="start" data-day="${esc(d.id)}" ${d.exercises.length ? "" : "disabled"}>Empezar entreno</button>`}
-      <button class="btn" data-action="edit-on">Editar día</button>
-    </div>`;
+  const fecha = fromIso(pickedDate(d.id)).toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long" });
+  const boton = state.active ? `<a class="btn primary" href="#/entreno">Continuar</a>`
+    : `<button class="btn primary" data-action="start" data-day="${esc(d.id)}" ${d.exercises.length ? "" : "disabled"}>Empezar entreno</button>`;
+  return `<header class="top"><a href="#/" class="back">‹ Inicio</a>
+      <div class="titulo-grupo"><h1>${esc(d.title)}</h1>${boton}</div>
+      <p class="muted">${fecha}${hasWeekly(d) ? ` · semana ${programWeek()} de ${WEEKS}` : ""}</p></header>
+    ${d.exercises.length ? d.exercises.map((e) => `<a class="card ej" ${guiaLink(e.guia)}>
+        <span class="ej-img" aria-hidden="true">Imagen<br>próximamente</span>
+        <span class="ej-txt"><strong>${esc(e.name)}</strong><span class="muted small">${esc(target(e))}</span></span>
+      </a>`).join("") : `<p class="muted">Este grupo no tiene ejercicios todavía.</p>`}
+    <button class="btn block ghost" data-action="edit-on">Editar grupo</button>`;
 }
 
 function dayEdit(d) {
   const opt = (v, label, sel) => `<option value="${v}" ${sel ? "selected" : ""}>${label}</option>`;
-  return `<header class="top"><h1>Editar día</h1></header>
-    <label class="field">Nombre del día<input data-field="day" data-k="title" value="${esc(d.title)}"></label>
-    <label class="field">Día de la semana<select data-field="day" data-k="weekday">
-      ${opt("", "— Sin día fijo —", d.weekday == null)}${DIAS.map((n, i) => opt(i, n, d.weekday === i)).join("")}
-    </select></label>
+  return `<header class="top"><h1>Editar grupo</h1></header>
+    <label class="field">Nombre del grupo<input data-field="day" data-k="title" value="${esc(d.title)}"></label>
     ${d.exercises.map((e, i) => `<div class="card edit">
       <div class="row"><strong>Ejercicio ${i + 1}</strong><span class="icons">
         <button class="icon" data-action="ex-move" data-i="${i}" data-d="-1" aria-label="Subir">↑</button>
@@ -148,7 +156,7 @@ function dayEdit(d) {
       <label class="field">Notas<input data-field="rx" data-i="${i}" data-k="notes" value="${esc(e.notes)}"></label>
     </div>`).join("")}
     <button class="btn block" data-action="ex-add">+ Añadir ejercicio</button>
-    <div class="actions"><button class="btn primary" data-action="edit-off">Listo</button><button class="btn danger" data-action="day-del">Eliminar día</button></div>`;
+    <div class="actions"><button class="btn primary" data-action="edit-off">Listo</button><button class="btn danger" data-action="day-del">Eliminar grupo</button></div>`;
 }
 
 function workout() {
@@ -182,10 +190,8 @@ function exerciseBlock(e, ei) {
     </div>`;
   }).join("");
   return `<section class="card ex">
-    <strong>${esc(e.name)}</strong>
-    <span class="muted small">${esc(e.target)}</span>
+    <a class="ex-head" ${guiaLink(e.guia)}><strong>${esc(e.name)}</strong><span class="muted small">${esc(e.target)}</span></a>
     ${e.notes ? `<p class="note">${esc(e.notes)}</p>` : ""}
-    ${guiaBtns(e.guia)}
     ${goal}
     <div class="sets t-${e.type}">
       <div class="set head"><span>Serie</span><span>Anterior</span>${cols.map((c) => `<span>${c}</span>`).join("")}<span></span></div>
@@ -367,7 +373,7 @@ function startWorkout(dayId) {
   if (state.active) { location.hash = "#/entreno"; return; }
   const d = state.routine.days.find((x) => x.id === dayId);
   if (!d) return;
-  state.active = { id: uid(), dayId: d.id, title: d.title, start: Date.now(), exercises: d.exercises.map(activeExercise) };
+  state.active = { id: uid(), dayId: d.id, title: d.title, start: Date.now(), fecha: pickedDate(d.id), exercises: d.exercises.map(activeExercise) };
   save();
   location.hash = "#/entreno";
 }
@@ -380,8 +386,11 @@ function finishWorkout() {
     return;
   }
   if (done < all.length && !confirm(`Hay ${all.length - done} series sin marcar y no se guardarán. ¿Terminar el entreno?`)) return;
+  // El entreno queda registrado en la fecha elegida, conservando la hora y la duración reales.
+  let shift = 0;
+  if (a.fecha) { const t = fromIso(a.fecha), s = new Date(a.start); t.setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()); shift = t.getTime() - a.start; }
   const session = {
-    id: a.id, dayId: a.dayId, title: a.title, start: a.start, end: Date.now(),
+    id: a.id, dayId: a.dayId, title: a.title, start: a.start + shift, end: Date.now() + shift,
     exercises: a.exercises
       .map((e) => ({ key: e.key, name: e.name, type: e.type,
         sets: e.sets.filter((s) => s.done).map(({ kind, weight, reps, seconds }) => ({ kind, weight, reps, seconds })) }))
@@ -407,16 +416,24 @@ async function keepAwake() {
 // ---------- acciones (botones con data-action) ----------
 const actions = {
   start: (el) => startWorkout(el.dataset.day),
+  "pick-day": (el) => { modal = { type: "fecha", day: el.dataset.day }; render(); },
+  "fecha-ok": () => {
+    const date = document.getElementById("fecha").value || isoLocal(Date.now());
+    state.picked = { dayId: modal.day, date }; save();
+    location.hash = "#/dia/" + encodeURIComponent(modal.day);
+  },
+  "guia-pick": (el) => { modal = { type: "guia", ids: el.dataset.ids.split(",") }; render(); },
+  "modal-close": () => { modal = null; render(); },
   // "Volver" desde la guía: regresa a donde estabas (rutina o entreno); si no hay historial, a la lista.
   back: () => { if (prevHash !== null) history.back(); else location.hash = "#/guia"; },
   "edit-on": () => { editMode = true; render(); },
   "edit-off": () => { editMode = false; render(); },
   "day-add": () => {
-    const d = { id: uid(), title: "Nuevo día", weekday: null, exercises: [] };
+    const d = { id: uid(), title: "Nuevo grupo", weekday: null, exercises: [] };
     state.routine.days.push(d); markEdited(); editNext = true; location.hash = "#/dia/" + d.id;
   },
   "day-del": () => {
-    if (!confirm("¿Eliminar este día de la rutina? El historial no se borra.")) return;
+    if (!confirm("¿Eliminar este grupo de la rutina? El historial no se borra.")) return;
     state.routine.days = state.routine.days.filter((d) => d !== currentDay());
     markEdited(); editMode = false; location.hash = "#/";
   },
@@ -511,7 +528,7 @@ function render() {
   clearInterval(ticker); ticker = null;
   const { view } = route();
   const views = { "": home, dia: day, entreno: workout, historial: historyView, sesion: sessionView, progreso: progress, ejercicio: exerciseView, guia: guiaView, ajustes: settings };
-  app.innerHTML = (views[view] || home)();
+  app.innerHTML = (views[view] || home)() + modalView();
   document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.nav === (NAV_OF[view] ?? "")));
   if (view === "entreno" && state.active) {
     keepAwake();
@@ -553,7 +570,7 @@ const scrollPos = {};
 let curHash = location.hash, prevHash = null;
 window.addEventListener("scroll", () => { scrollPos[curHash] = window.scrollY; }, { passive: true });
 window.addEventListener("hashchange", () => {
-  editMode = editNext; editNext = false;
+  editMode = editNext; editNext = false; modal = null;
   prevHash = curHash; curHash = location.hash;
   render();
   window.scrollTo(0, scrollPos[curHash] ?? 0);
