@@ -1,7 +1,7 @@
 // Service worker: guarda la app en caché para que funcione sin internet (gimnasio sin señal).
 // Estrategia "stale-while-revalidate": responde al instante desde la caché y actualiza en segundo plano.
 // Si cambias archivos y quieres forzar la actualización, sube el número de CACHE.
-const CACHE = "entreno-v8";
+const CACHE = "entreno-v9";
 const ASSETS = [
   "./", "./index.html", "./styles.css", "./manifest.webmanifest",
   "./js/app.js", "./js/store.js", "./js/stats.js", "./js/timer.js", "./js/rutina.js", "./js/guia.js",

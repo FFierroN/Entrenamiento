@@ -116,7 +116,7 @@ function programa() {
 function groupBox(d) {
   const last = lastDone(d.id);
   // Con un entreno en curso no se vuelve a preguntar la fecha.
-  const link = state.active ? `href="#/dia/${encodeURIComponent(d.id)}"` : `href="#" data-action="pick-day" data-day="${esc(d.id)}"`;
+  const link = `href="#/dia/${encodeURIComponent(d.id)}"`;
   return `<a class="grupo" ${link}>
       <strong>${esc(d.title)}</strong>
       <span class="muted small">${d.exercises.length} ejercicios</span>
@@ -128,12 +128,11 @@ function day() {
   const d = currentDay();
   if (!d) return notFound();
   if (editMode) return dayEdit(d);
-  const fecha = fromIso(pickedDate(d.id)).toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long" });
   const boton = state.active ? `<a class="btn primary" href="#/entreno">Continuar</a>`
-    : `<button class="btn primary" data-action="start" data-day="${esc(d.id)}" ${d.exercises.length ? "" : "disabled"}>Empezar entreno</button>`;
+    : `<button class="btn primary" data-action="pick-day" data-day="${esc(d.id)}" ${d.exercises.length ? "" : "disabled"}>Empezar entreno</button>`;
   return `<header class="top"><a href="#/programa" class="back">‹ ${esc(state.routine.name)}</a>
       <div class="titulo-grupo"><h1>${esc(d.title)}</h1>${boton}</div>
-      <p class="muted">${fecha}${hasWeekly(d) ? ` · semana ${programWeek()} de ${WEEKS}` : ""}</p></header>
+      ${hasWeekly(d) ? `<p class="muted">Semana ${programWeek()} de ${WEEKS}</p>` : ""}</header>
     ${d.exercises.length ? d.exercises.map((e) => `<a class="card ej" ${guiaLink(e.guia)}>
         <span class="ej-img" aria-hidden="true">Imagen<br>próximamente</span>
         <span class="ej-txt"><strong>${esc(e.name)}</strong><span class="muted small">${esc(target(e))}</span></span>
@@ -424,8 +423,9 @@ const actions = {
   "pick-day": (el) => { modal = { type: "fecha", day: el.dataset.day }; render(); },
   "fecha-ok": () => {
     const date = document.getElementById("fecha").value || isoLocal(Date.now());
-    state.picked = { dayId: modal.day, date }; save();
-    location.hash = "#/dia/" + encodeURIComponent(modal.day);
+    state.picked = { dayId: modal.day, date };
+    const day = modal.day; modal = null;
+    startWorkout(day);
   },
   "guia-pick": (el) => { modal = { type: "guia", ids: el.dataset.ids.split(",") }; render(); },
   "modal-close": () => { modal = null; render(); },

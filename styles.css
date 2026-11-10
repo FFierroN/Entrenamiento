@@ -140,9 +140,8 @@ h2 { font-size: 1.05rem; margin: 24px 0 8px; color: var(--muted); font-weight: 6
 .programa { display: block; padding: 28px 20px; }
 .titulo-programa { color: var(--accent); font-size: 2rem; font-weight: 800; }
 .programa h2 { margin: 0; color: var(--accent); font-size: 2rem; font-weight: 800; letter-spacing: -.01em; }
-.grupos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.grupo { display: flex; flex-direction: column; gap: 4px; min-height: 104px; padding: 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); }
-.grupo:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.grupos { display: flex; flex-direction: column; gap: 10px; }
+.grupo { display: flex; flex-direction: column; gap: 4px; padding: 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); }
 .titulo-grupo { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .titulo-grupo h1 { min-width: 0; }
 .titulo-grupo .btn { flex-shrink: 0; }
