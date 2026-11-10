@@ -9,7 +9,7 @@ const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "
 const TIPOS = { weight_reps: "Peso y reps", reps_only: "Solo reps", duration: "Tiempo", check: "Solo marcar" };
 const KINDS = ["normal", "warmup", "dropset", "failure"];
 const KIND_NAME = { normal: "Normal", warmup: "Calentamiento", dropset: "Dropset", failure: "Al fallo" };
-const NAV_OF = { "": "", dia: "", entreno: "", historial: "historial", sesion: "historial", progreso: "progreso", ejercicio: "progreso", guia: "guia", ajustes: "ajustes" };
+const NAV_OF = { "": "", programa: "", dia: "", entreno: "", historial: "historial", sesion: "historial", progreso: "progreso", ejercicio: "progreso", guia: "guia", ajustes: "ajustes" };
 
 let modal = null, editMode = false, editNext = false, ticker = null, wakeLock = null;
 
@@ -101,9 +101,16 @@ function home() {
   const r = state.routine;
   let h = `<header class="top"><h1>Inicio</h1></header>`;
   if (state.active) h += `<a class="card accent" href="#/entreno"><strong>Entreno en curso</strong><span>${esc(state.active.title)} · continuar →</span></a>`;
-  h += `<section class="programa"><h2>${esc(r.name)}</h2><div class="grupos">${r.days.map(groupBox).join("")}</div></section>`;
-  h += `<button class="btn block ghost" data-action="day-add">+ Añadir grupo</button>`;
+  h += `<a class="programa" href="#/programa"><h2>${esc(r.name)}</h2></a>`;
   return h;
+}
+
+// Pantalla del programa: una caja por grupo de ejercicios.
+function programa() {
+  const r = state.routine;
+  return `<header class="top"><a href="#/" class="back">‹ Inicio</a><h1 class="titulo-programa">${esc(r.name)}</h1></header>
+    <div class="grupos">${r.days.map(groupBox).join("")}</div>
+    <button class="btn block ghost" data-action="day-add">+ Añadir grupo</button>`;
 }
 
 function groupBox(d) {
@@ -124,7 +131,7 @@ function day() {
   const fecha = fromIso(pickedDate(d.id)).toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long" });
   const boton = state.active ? `<a class="btn primary" href="#/entreno">Continuar</a>`
     : `<button class="btn primary" data-action="start" data-day="${esc(d.id)}" ${d.exercises.length ? "" : "disabled"}>Empezar entreno</button>`;
-  return `<header class="top"><a href="#/" class="back">‹ Inicio</a>
+  return `<header class="top"><a href="#/programa" class="back">‹ ${esc(state.routine.name)}</a>
       <div class="titulo-grupo"><h1>${esc(d.title)}</h1>${boton}</div>
       <p class="muted">${fecha}${hasWeekly(d) ? ` · semana ${programWeek()} de ${WEEKS}` : ""}</p></header>
     ${d.exercises.length ? d.exercises.map((e) => `<a class="card ej" ${guiaLink(e.guia)}>
@@ -304,14 +311,12 @@ function guiaDetalle(id) {
   const g = guiaPorId(id);
   if (!g) return notFound();
   const enRutina = state.routine.days.filter((d) => d.exercises.some((e) => e.guia?.includes(id)));
-  const video = `https://www.youtube.com/results?search_query=${encodeURIComponent(g.video || g.nombre + " técnica")}`;
   const lista = (titulo, items, cls) => items?.length ? `<h2>${titulo}</h2><ul class="${cls}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : "";
   return `<header class="top"><a href="#/guia" class="back" data-action="back">‹ Volver</a><h1>${esc(g.nombre)}</h1><p class="muted">${esc(g.musculos)}</p></header>
     ${g.foto ? `<figure class="guia-foto"><img src="${g.foto.src}" alt="${esc(g.nombre)}">
         <figcaption>Foto: ${esc(g.foto.autor)} · ${esc(g.foto.licencia)} · <a href="${g.foto.fuente}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption></figure>`
-      : `<p class="muted small">No hay una foto con licencia libre para este ejercicio; mira un video de referencia.</p>`}
+      : ""}
     ${g.dificultad ? `<p class="dificultad" aria-label="Dificultad ${g.dificultad} de 5">Dificultad <span>${"●".repeat(g.dificultad)}<i>${"●".repeat(5 - g.dificultad)}</i></span></p>` : ""}
-    <a class="btn block" href="${video}" target="_blank" rel="noopener">▶ Buscar video en YouTube</a>
     ${g.darebee ? `<a class="btn block" href="${darebeeUrl(g.darebee.slug)}" target="_blank" rel="noopener">Ver en DAREBEE (traducido)</a>
       ${g.darebee.similar ? `<p class="muted small center">Variante parecida: ${esc(g.darebee.similar)}</p>` : ""}` : ""}
     <h2>Cómo se hace</h2><ol class="pasos">${g.pasos.map((p) => `<li>${esc(p)}</li>`).join("")}</ol>
@@ -527,7 +532,7 @@ function onField(el, isChange) {
 function render() {
   clearInterval(ticker); ticker = null;
   const { view } = route();
-  const views = { "": home, dia: day, entreno: workout, historial: historyView, sesion: sessionView, progreso: progress, ejercicio: exerciseView, guia: guiaView, ajustes: settings };
+  const views = { "": home, programa, dia: day, entreno: workout, historial: historyView, sesion: sessionView, progreso: progress, ejercicio: exerciseView, guia: guiaView, ajustes: settings };
   app.innerHTML = (views[view] || home)() + modalView();
   document.querySelectorAll(".nav a").forEach((a) => a.classList.toggle("on", a.dataset.nav === (NAV_OF[view] ?? "")));
   if (view === "entreno" && state.active) {
